@@ -2,6 +2,12 @@
 
 Primeira versão do site da pizzaria tradicional de Indaial, SC. Site responsivo com cardápio, busca por ingrediente, categorias, seleção de sabores e resumo de consulta. Sem dependências externas de execução.
 
+## Interface e navegação
+
+Tema escuro com resumo e valor atualizados durante a montagem. O botão de continuar fica ao lado do resumo no computador e fixo na parte inferior no celular. Sabores aparecem em uma lista compacta com rolagem própria. Marcar sabores e bordas atualiza apenas a seleção e o total, sem recriar os controles nem deslocar a tela. A busca de sabores consulta todo o cardápio; filtros e chips permitem conferir e retirar escolhas. Etapas anteriores e escolhas do resumo podem ser clicadas para revisar. Bordas, refri extra e molhos começam sem adicional, e o cliente pode continuar ou alterar essas opções.
+
+Ao concluir a pizza, o carrinho abre para revisão, adicionar outra pizza ou finalizar. Remover um item oferece Desfazer; quantidade máxima é 20 por combinação. O resumo preparado é mantido ao fechar/reabrir o carrinho e invalidado quando o pedido ou os dados do cliente mudam.
+
 ## Desenvolvimento
 
 Requer Node.js 22 ou superior.
@@ -21,7 +27,7 @@ Os preços foram transcritos dos prints. Pizzas: broto 20 cm R$ 26; pequena 25 c
 
 ## Montagem do pedido
 
-A pizza é montada na ordem: tamanho → borda (ou sem recheio) → sabores → refrigerante (ou sem) → molhos (ou sem). Os limites confirmados são: broto 1 sabor; pequena e média até 2; grande, gigante e extra gigante até 4. O cliente pode selecionar menos sabores que o limite. A seleção é preservada entre categorias, buscas e ao voltar às etapas anteriores. Trocar o tamanho reinicia a montagem dessa pizza; o carrinho mantém as pizzas já adicionadas.
+A pizza é montada na ordem: tamanho → borda (ou sem recheio) → sabores → refrigerante (ou sem) → molhos (ou sem). Os limites confirmados são: broto 1 sabor; pequena e média até 2; grande, gigante e extra gigante até 4. O cliente pode selecionar menos sabores que o limite. A seleção é preservada entre categorias, buscas e ao voltar às etapas anteriores. Trocar o tamanho mantém as escolhas compatíveis; quando o novo tamanho aceita menos sabores, os excedentes são retirados e a interface informa quais foram removidos. Na broto, tocar em outro sabor troca a seleção diretamente. O carrinho permite editar a pizza pronta, mantendo sua quantidade.
 
 Nos combos, o Guaraná Kuat está sempre incluso e não existe desconto para removê-lo. A etapa é chamada **Refri adicional**; **Sem refri adicional** mantém o Kuat. Selecionar outra bebida soma seu preço e mantém o Kuat. Nas pizzas sem combo, a etapa permite escolher um refrigerante ou ficar sem. Molhos permitem escolher sem molho ou maionese caseira, com quantidade de 1 a 10 por pizza. O valor e o resumo incluem todos os acompanhamentos e suas quantidades. Aumentar a quantidade de uma pizza no carrinho também multiplica seus acompanhamentos.
 
@@ -31,7 +37,7 @@ O número `+55 47 8842-1533` foi confirmado pelo usuário e está configurado em
 
 Envio automático à pizzaria e ao cliente, registro de pedidos e confirmação independente do WhatsApp exigem um backend e integração autorizada com WhatsApp Business. Não estão implementados neste protótipo. Não colete credenciais no navegador.
 
-Esta versão mantém a seleção somente na memória. Recarregar a página limpa a seleção; os dados do cliente não são gravados. A arte de pizza é uma ilustração local, não uma fotografia dos produtos reais.
+O carrinho e a montagem de uma nova pizza são salvos neste navegador por 24 horas, com validação dos itens ao restaurar. Nome, endereço e observações não são gravados: permanecem somente na memória da página e são incluídos na mensagem quando o cliente abre o WhatsApp. Se o armazenamento local estiver bloqueado, o fluxo continua funcionando sem persistência. Edições de pizzas prontas são aplicadas somente ao salvar; cancelar mantém o pedido anterior. A arte de pizza é uma ilustração local, não uma fotografia dos produtos reais.
 
 ## Hospedagem no Netlify
 
