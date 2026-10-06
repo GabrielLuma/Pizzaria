@@ -17,15 +17,21 @@ Porta padrão: 3000. `PORT` permite outra porta. Execute `npm test` para validar
 
 O cardápio em `public/menu.js` foi transcrito da imagem fornecida: 55 sabores tradicionais, 7 especiais, 11 doces, 5 pratos chineses, 13 lanches, 17 porções, 5 bebidas e 1 molho. Total: 114 opções, além de 6 tamanhos de pizza e 5 opções de borda. Confirme a transcrição com a pizzaria antes da publicação. O site existente não pôde ser consultado: a tentativa de acesso retornou HTTP 403.
 
-Os preços foram transcritos dos prints. Pizzas: broto 20 cm R$ 26; pequena 25 cm R$ 53; média 30 cm R$ 65 (valor promocional exibido); grande 35 cm + Guaraná Kuat R$ 99; gigante 45 cm + Kuat R$ 120; extra gigante 50 cm + Kuat R$ 135. O volume da bebida dos combos não foi informado. Sabores especiais acrescentam R$ 5 por pizza de um sabor. Bordas: sem recheio R$ 0, Catupiry/Cheddar R$ 20 e chocolate ao leite/branco R$ 25. Demais sabores não têm adicional, conforme confirmação do usuário. O total inclui todos esses valores e quantidades. O fluxo de pizza começa pela escolha de um dos seis tamanhos, depois mostra os sabores tradicionais/especiais/doces e a borda. Ao adicionar uma pizza, volta para os tamanhos para montar a próxima. O carrinho mantém as pizzas já adicionadas. A versão permite um sabor por pizza; quantidade de sabores por tamanho e regra para combinar sabores ainda precisam ser confirmadas. Endereço e horários também estão pendentes. O resumo é uma solicitação que requer o aceite da pizzaria. A entrega fica desabilitada até a definição da área e das taxas. Pagamento previsto na entrega/retirada; nesta versão somente retirada é selecionável.
+Os preços foram transcritos dos prints. Pizzas: broto 20 cm R$ 26; pequena 25 cm R$ 53; média 30 cm R$ 65 (valor promocional exibido); grande 35 cm + Guaraná Kuat R$ 99; gigante 45 cm + Kuat R$ 120; extra gigante 50 cm + Kuat R$ 135. O volume do Kuat dos combos não foi informado. Bordas: sem recheio R$ 0, Catupiry/Cheddar R$ 20 e chocolate ao leite/branco R$ 25. Cada sabor especial selecionado acrescenta R$ 5, conforme confirmação do usuário; os demais sabores não têm adicional. O cálculo usa centavos.
+
+## Montagem do pedido
+
+A pizza é montada na ordem: tamanho → borda (ou sem recheio) → sabores → refrigerante (ou sem) → molhos (ou sem). Os limites confirmados são: broto 1 sabor; pequena e média até 2; grande, gigante e extra gigante até 4. O cliente pode selecionar menos sabores que o limite. A seleção é preservada entre categorias, buscas e ao voltar às etapas anteriores. Trocar o tamanho reinicia a montagem dessa pizza; o carrinho mantém as pizzas já adicionadas.
+
+Nos combos, o Guaraná Kuat está sempre incluso e não existe desconto para removê-lo. A etapa é chamada **Refri adicional**; **Sem refri adicional** mantém o Kuat. Selecionar outra bebida soma seu preço e mantém o Kuat. Nas pizzas sem combo, a etapa permite escolher um refrigerante ou ficar sem. Molhos permitem escolher sem molho ou maionese caseira, com quantidade de 1 a 10 por pizza. O valor e o resumo incluem todos os acompanhamentos e suas quantidades. Aumentar a quantidade de uma pizza no carrinho também multiplica seus acompanhamentos.
+
+No final, o cliente informa nome, observações opcionais e escolhe retirada ou uma **solicitação de entrega**. Para solicitar entrega é necessário um endereço. A área atendida e a taxa ainda serão definidas: a solicitação não garante atendimento e a taxa não está incluída no total dos itens. O resumo deixa essa pendência explícita. Ao voltar para retirada, o endereço não é enviado. Pagamento na entrega ou retirada. Endereço da pizzaria e horários de funcionamento ainda estão pendentes.
 
 O número `+55 47 8842-1533` foi confirmado pelo usuário e está configurado em formato internacional somente com dígitos. O parâmetro do link antigo traz outro número e não foi usado como contato. O link `wa.me` abre a conversa com o resumo; o cliente ainda precisa tocar em enviar. A entrega da mensagem depende de o número ter uma conta ativa no WhatsApp; não foi realizado envio de mensagem durante a validação.
 
 Envio automático à pizzaria e ao cliente, registro de pedidos e confirmação independente do WhatsApp exigem um backend e integração autorizada com WhatsApp Business. Não estão implementados neste protótipo. Não colete credenciais no navegador.
 
 Esta versão mantém a seleção somente na memória. Recarregar a página limpa a seleção; os dados do cliente não são gravados. A arte de pizza é uma ilustração local, não uma fotografia dos produtos reais.
-
-## Ambiente
 
 ## Hospedagem no Netlify
 

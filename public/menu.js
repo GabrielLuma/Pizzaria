@@ -103,12 +103,12 @@ export const menu = [
 
 // Preços em centavos, transcritos dos prints enviados pelo usuário.
 export const pizzaSizes = [
-  { id: 'broto', name: 'Broto', diameter: 20, price: 2600, combo: false },
-  { id: 'pequena', name: 'Pequena', diameter: 25, price: 5300, combo: false },
-  { id: 'media', name: 'Média', diameter: 30, price: 6500, combo: false },
-  { id: 'grande', name: 'Grande + Guaraná Kuat', diameter: 35, price: 9900, combo: true },
-  { id: 'gigante', name: 'Gigante + Guaraná Kuat', diameter: 45, price: 12000, combo: true },
-  { id: 'extra', name: 'Extra Gigante + Guaraná Kuat', diameter: 50, price: 13500, combo: true },
+  { id: 'broto', maxFlavors: 1, name: 'Broto', diameter: 20, price: 2600, combo: false },
+  { id: 'pequena', maxFlavors: 2, name: 'Pequena', diameter: 25, price: 5300, combo: false },
+  { id: 'media', maxFlavors: 2, name: 'Média', diameter: 30, price: 6500, combo: false },
+  { id: 'grande', maxFlavors: 4, name: 'Grande + Guaraná Kuat', diameter: 35, price: 9900, combo: true },
+  { id: 'gigante', maxFlavors: 4, name: 'Gigante + Guaraná Kuat', diameter: 45, price: 12000, combo: true },
+  { id: 'extra', maxFlavors: 4, name: 'Extra Gigante + Guaraná Kuat', diameter: 50, price: 13500, combo: true },
 ];
 const pricedCategories = {
   lanches: [
@@ -157,3 +157,6 @@ export const pizzaEdges = [
   { id: 'branco', name: 'Borda de Chocolate Branco', price: 2500 },
 ];
 menu.filter(item => item.category === 'especiais').forEach(item => { item.surcharge = 500; });
+
+// Confirmado pelo usuário: cada sabor especial escolhido acrescenta R$ 5.
+export const pizzaRules = { specialSurchargeMode: 'per-flavor' };
