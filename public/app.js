@@ -3,16 +3,27 @@ import { changeQuantity, buildSummary, cartLines, cartTotal, money, isPizza } fr
 
 let cart = {};
 let category = 'tradicionais';
+let section = 'pizzas';
+let selectedSize = null;
 let summary = '';
 const $ = selector => document.querySelector(selector);
 const dialog = $('#cart-dialog');
 const escape = value => value.replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
 const normalize = value => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 function renderMenu() {
+  const choosingSize = section === 'pizzas' && !selectedSize;
+  $('#pizza-builder').hidden = section !== 'pizzas' || choosingSize;
+  $('#search-label').hidden = choosingSize;
+  if (choosingSize) {
+    $('#result-count').textContent = 'Passo 1 · Escolha o tamanho da sua pizza';
+    $('#menu-grid').innerHTML = pizzaSizes.map((size, i) => `<article class="menu-card size-card"><div class="card-top"><span class="item-number">${String(i + 1).padStart(2, '0')}</span><span class="item-kind">${size.diameter} CM</span></div><h3>${escape(size.name)}</h3><p>Pizza de ${size.diameter} cm${size.combo ? ', com Guaraná Kuat incluso' : ''}. Depois, escolha o sabor e a borda.</p><div class="card-bottom"><span>A partir de ${money(size.price)}</span><button data-choose-size="${size.id}" aria-label="Escolher pizza ${escape(size.name)}">Escolher →</button></div></article>`).join('');
+    return;
+  }
+  if (section === 'pizzas') $('#chosen-size').textContent = `${selectedSize.name} · ${selectedSize.diameter} cm · base ${money(selectedSize.price)}`;
   const search = normalize($('#search').value.trim());
   const items = menu.filter(item => item.category === category && normalize(`${item.name} ${item.description}`).includes(search));
   $('#result-count').textContent = `${items.length} opções para explorar`;
-  $('#menu-grid').innerHTML = items.length ? items.map((item, i) => `<article class="menu-card"><div class="card-top"><span class="item-number">${String(i + 1).padStart(2, '0')}</span><span class="item-kind">${isPizza(item) ? 'PIZZA' : 'DA NOSSA COZINHA'}</span></div><h3>${escape(item.name)}</h3><p>${escape(item.description)}</p>${isPizza(item) ? `<label class="size-label">Tamanho<select data-size="${item.id}" aria-label="Tamanho de ${escape(item.name)}">${pizzaSizes.map(size => `<option value="${size.id}">${size.name} · ${size.diameter} cm · ${money(size.price + (item.surcharge || 0))}</option>`).join('')}</select></label><label class="size-label">Borda<select data-edge="${item.id}" aria-label="Borda de ${escape(item.name)}">${pizzaEdges.map(edge => `<option value="${edge.id}">${edge.name}${edge.price ? ' · + ' + money(edge.price) : ''}</option>`).join('')}</select></label>` : ''}<div class="card-bottom"><span>${isPizza(item) ? money(pizzaSizes[0].price + (item.surcharge || 0)) : money(item.price)}</span><button data-add="${item.id}" aria-label="Adicionar ${escape(item.name)} à seleção">+</button></div></article>`).join('') : '<p class="empty">Nenhuma opção encontrada nessa categoria. Tente outro nome ou ingrediente.</p>';
+  $('#menu-grid').innerHTML = items.length ? items.map((item, i) => `<article class="menu-card"><div class="card-top"><span class="item-number">${String(i + 1).padStart(2, '0')}</span><span class="item-kind">${isPizza(item) ? 'PIZZA' : 'DA NOSSA COZINHA'}</span></div><h3>${escape(item.name)}</h3><p>${escape(item.description)}</p>${isPizza(item) ? `<p class="pizza-size-caption">${escape(selectedSize.name)} · ${selectedSize.diameter} cm${item.surcharge ? ' · especial + ' + money(item.surcharge) : ''}</p><label class="size-label">Borda<select data-edge="${item.id}" aria-label="Borda de ${escape(item.name)}">${pizzaEdges.map(edge => `<option value="${edge.id}">${edge.name}${edge.price ? ' · + ' + money(edge.price) : ''}</option>`).join('')}</select></label>` : ''}<div class="card-bottom"><span>${isPizza(item) ? money(selectedSize.price + (item.surcharge || 0)) : money(item.price)}</span><button data-add="${item.id}" aria-label="Adicionar ${escape(item.name)} à seleção">${isPizza(item) ? 'Adicionar pizza' : '+'}</button></div></article>`).join('') : '<p class="empty">Nenhuma opção encontrada nessa categoria. Tente outro nome ou ingrediente.</p>';
 }
 function renderCart() {
   const items = cartLines(cart);
@@ -30,6 +41,15 @@ function toast(message) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => $('#toast').classList.remove('show'), 2500);
 }
+document.querySelectorAll('[data-section]').forEach(button => button.addEventListener('click', () => {
+  section = button.dataset.section;
+  category = section === 'pizzas' ? 'tradicionais' : section;
+  $('#search').value = '';
+  document.querySelectorAll('[data-section]').forEach(tab => { tab.classList.toggle('active', tab === button); tab.setAttribute('aria-pressed', String(tab === button)); });
+  document.querySelectorAll('[data-category]').forEach(tab => { tab.classList.toggle('active', tab.dataset.category === category); tab.setAttribute('aria-pressed', String(tab.dataset.category === category)); });
+  renderMenu();
+}));
+$('#change-size').addEventListener('click', () => { selectedSize = null; $('#search').value = ''; renderMenu(); });
 document.querySelectorAll('[data-category]').forEach(button => button.addEventListener('click', () => {
   category = button.dataset.category;
   document.querySelectorAll('[data-category]').forEach(tab => { tab.classList.toggle('active', tab === button); tab.setAttribute('aria-pressed', String(tab === button)); });
@@ -37,22 +57,37 @@ document.querySelectorAll('[data-category]').forEach(button => button.addEventLi
 }));
 $('#search').addEventListener('input', renderMenu);
 $('#menu-grid').addEventListener('change', event => {
-  if (!event.target.matches('[data-size], [data-edge]')) return;
+  if (!event.target.matches('[data-edge]')) return;
   const card = event.target.closest('.menu-card');
   const item = menu.find(item => item.id === card.querySelector('[data-add]').dataset.add);
-  const size = pizzaSizes.find(size => size.id === card.querySelector('[data-size]').value);
+  const size = selectedSize;
   const edge = pizzaEdges.find(edge => edge.id === card.querySelector('[data-edge]').value);
   card.querySelector('.card-bottom > span').textContent = money(size.price + edge.price + (item.surcharge || 0));
 });
 $('#menu-grid').addEventListener('click', event => {
+  const sizeButton = event.target.closest('[data-choose-size]');
+  if (sizeButton) {
+    selectedSize = pizzaSizes.find(size => size.id === sizeButton.dataset.chooseSize);
+    $('#search').value = '';
+    renderMenu();
+    $('#change-size').focus({ preventScroll: true });
+    return;
+  }
   const button = event.target.closest('[data-add]');
   if (!button) return;
   const item = menu.find(item => item.id === button.dataset.add);
-  const size = isPizza(item) ? document.querySelector(`[data-size="${item.id}"]`).value : null;
+  const size = isPizza(item) ? selectedSize?.id : null;
+  if (isPizza(item) && !size) return;
   const edge = size ? document.querySelector(`[data-edge="${item.id}"]`).value : null;
   const key = size ? `${item.id}:${size}:${edge}` : item.id;
   cart = changeQuantity(cart, key, 1);
   renderCart();
+  if (isPizza(item)) {
+    selectedSize = null;
+    $('#search').value = '';
+    renderMenu();
+    $('#menu-grid').querySelector('[data-choose-size]').focus({ preventScroll: true });
+  }
   toast('Item adicionado à sua seleção');
 });
 $('#cart-items').addEventListener('click', event => {
