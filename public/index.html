@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#861f2c">
+  <meta name="description" content="Conheça o cardápio da Pizzaria Luna Luna. Mais de 20 anos de tradição em Indaial, Santa Catarina.">
+  <title>Pizzaria Luna Luna · Tradição em Indaial</title>
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <header class="header">
+    <a class="brand" href="#inicio" aria-label="Pizzaria Luna Luna, início"><span class="brand-icon" aria-hidden="true">☾</span><span>Luna Luna<small>P I Z Z A R I A</small></span></a>
+    <nav aria-label="Navegação principal"><a href="#cardapio">Cardápio</a><a href="#historia">Nossa história</a><button id="open-cart" class="cart-button">Minha seleção <span id="cart-count">0</span></button></nav>
+  </header>
+  <main>
+    <section id="inicio" class="hero">
+      <div class="hero-copy"><p class="eyebrow">INDAIAL, SC · MAIS DE 20 ANOS DE TRADIÇÃO</p><h1>Tem sabores que<br>fazem parte da<br><em>nossa história.</em></h1><p>Da primeira fatia ao último encontro, a Luna Luna faz parte da sua mesa. Encontre seu sabor favorito e prepare a próxima noite de pizza.</p><a class="primary" href="#cardapio">Explore o cardápio <span aria-hidden="true">↗</span></a><div class="hero-foot"><span aria-hidden="true">✦</span> Tradição da nossa cidade. Sabor para compartilhar.</div></div>
+      <div class="hero-art"><img src="/pizza.svg" alt="Ilustração de uma pizza com queijo, tomate e folhas de manjericão"><div class="seal">Mais de<strong>20 anos</strong>em Indaial</div><span class="art-caption">Uma boa pizza. Uma boa companhia.</span></div>
+    </section>
+    <div class="ribbon" aria-hidden="true">DA NOSSA COZINHA PARA A SUA MESA <span>✦</span> SABORES QUE REÚNEM <span>✦</span> LUNA LUNA, INDAIAL <span>✦</span></div>
+    <section id="cardapio" class="menu-section">
+      <div class="section-heading"><div><p class="eyebrow">ESCOLHA O SEU FAVORITO</p><h2>Nosso cardápio</h2></div><p>Os clássicos de sempre,<br>e um sabor para cada vontade.</p></div>
+      <div class="notice"><strong>Valores do cardápio</strong><span>Preços cadastrados conforme o cardápio enviado. Escolha o tamanho, um sabor e a borda. Sabores especiais têm adicional de R$ 5,00.</span></div>
+      <div class="menu-tools"><div class="tabs" role="group" aria-label="Categorias"><button class="active" data-category="tradicionais" aria-pressed="true">Tradicionais</button><button data-category="especiais" aria-pressed="false">Especiais</button><button data-category="doces" aria-pressed="false">Doces</button><button data-category="chinesa" aria-pressed="false">Comida chinesa</button><button data-category="lanches" aria-pressed="false">Lanches</button><button data-category="porcoes" aria-pressed="false">Porções</button><button data-category="bebidas" aria-pressed="false">Bebidas</button><button data-category="molhos" aria-pressed="false">Molhos</button></div><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Busque seu sabor" aria-label="Buscar sabor ou ingrediente"></label></div>
+      <div class="list-heading"><span id="result-count"></span><span>FEITO PARA COMPARTILHAR</span></div>
+      <div id="menu-grid" class="menu-grid"></div>
+      <p class="menu-note">Conforme o cardápio enviado, todas as pizzas contêm orégano. Consulte a pizzaria sobre ingredientes, alergênicos e alterações.</p>
+    </section>
+    <section id="historia" class="story"><div class="story-mark" aria-hidden="true">☾<span>Luna Luna</span></div><div><p class="eyebrow">UMA HISTÓRIA COM INDAIAL</p><h2>Mais de duas décadas.<br>Muitos momentos à mesa.</h2><p>A Luna Luna é uma pizzaria tradicional de Indaial, Santa Catarina. Há mais de 20 anos, faz parte dos encontros e das noites de pizza da cidade.</p><a href="#cardapio">Escolha o sabor do seu próximo encontro →</a></div></section>
+  </main>
+  <footer><a class="brand" href="#inicio">Luna Luna<small>PIZZARIA · INDAIAL, SC</small></a><p>Mais de 20 anos de tradição.</p><a href="https://pedir.delivery/pizzaria.luna" target="_blank" rel="noopener noreferrer">Acessar o site atual de pedidos ↗</a></footer>
+  <dialog id="cart-dialog" aria-labelledby="cart-title"><div class="dialog-head"><div><p class="eyebrow">SEU PRÓXIMO ENCONTRO</p><h2 id="cart-title">Minha seleção</h2></div><button id="close-cart" class="icon-button" aria-label="Fechar seleção">×</button></div><p class="cart-info">Confira seus itens antes de enviar. O total inclui o tamanho, o adicional do sabor especial e a borda. Aguarde a confirmação de disponibilidade pela pizzaria.</p><div id="cart-items"></div><form id="order-form"><label>Seu nome<input name="name" required maxlength="80" autocomplete="given-name" placeholder="Como podemos chamar você?"></label><label>Observações<textarea name="notes" maxlength="500" placeholder="Alguma preferência? Conte para nós."></textarea></label><div class="fulfillment"><strong>Retirada · pagamento no local</strong><p>A entrega será habilitada quando a área e as taxas forem definidas.</p></div><button class="primary" id="review-button" type="submit">Preparar resumo <span aria-hidden="true">→</span></button></form><div id="summary-panel" hidden><h3>Revise seu resumo</h3><pre id="summary-text"></pre><p id="whatsapp-status" class="cart-info"></p><div class="summary-actions"><button id="copy-summary" class="primary">Copiar resumo</button><a id="whatsapp-link" class="primary" target="_blank" rel="noopener noreferrer" hidden>Abrir WhatsApp ↗</a></div><p class="cart-info">O WhatsApp abre uma mensagem pronta. Você precisa enviá-la na conversa; este site não envia mensagens automaticamente.</p></div><p id="feedback" class="feedback" role="status" aria-live="polite"></p></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
